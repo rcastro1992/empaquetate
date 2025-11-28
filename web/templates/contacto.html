@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block titulo %}Contáctanos{% endblock titulo %}
+
+{% block contenido %}
+
+<div class="container my-5">
+    <div class="row justify-content-center g-4">
+
+      
+
+        <!-- FORMULARIO (DERECHA) -->
+        <div class="col-md-7 d-flex">
+
+            {% if mensaje_info == "¡Tu mensaje se ha enviado correctamente!" %}
+                <!-- pantalla de exito -->
+                <div class="container p-5 text-center w-100">
+                    <div class="message-container">
+                        <h1>¡Envío Exitoso!</h1>
+                        <div class="animated-image my-3">
+                            <img src="{% static 'img/entrega-de-correo.gif' %}" alt="Éxito" class="gif" style="max-width:200px;">
+                        </div>
+                        <p class="fs-2">Tu mensaje ha sido enviado correctamente.</p>
+                        <p class="fs-5">Pronto te contactaremos</p>
+                    </div>
+                </div>
+
+                <script>
+                    setTimeout(function(){ window.location.href = "{% url 'home' %}"; }, 10000);
+                </script>
+
+            {% else %}
+                <!-- Formulario normal -->
+                <div class="card shadow-lg border-0 rounded-4 w-100">
+                    <div class="card-header text-center text-white py-3 rounded-top-4" style="background-color: #0d9648;">
+                        <h2>Contáctanos</h2>
+                    </div>
+                    <div class="card-body">
+
+                        <!-- Toast -->
+                        <div class="position-fixed top-0 end-0 p-3" style="z-index:11;">
+                            {% if mensaje_info %}
+                                <div class="toast align-items-center text-white bg-warning border-0 show">
+                                    <div class="d-flex">
+                                        <div class="toast-body">{{ mensaje_info }}</div>
+                                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Form -->
+                        <form action="" method="POST" novalidate>
+                            {% csrf_token %}
+
+                            {% for field in formulario %}
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                    {{ field|add_class:"form-control shadow-sm" }}
+                                    {% for error in field.errors %}
+                                        <div class="text-danger small mt-1">{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            {% endfor %}
+
+                            {% if formulario.non_field_errors %}
+                                <div class="alert alert-danger">{{ formulario.non_field_errors }}</div>
+                            {% endif %}
+
+                            <button type="submit" class="btn text-white w-100 mb-2" style="background-color:#0d9648;">Enviar Mensaje</button>
+                            <button type="reset" class="btn text-white w-100" style="background-color:#0d9648;">Limpiar Formulario</button>
+                        </form>
+
+                    </div>
+                </div>
+            {% endif %}
+
+        </div>
+
+          <!-- INFORMACIÓN DE CONTACTO (IZQUIERDA) -->
+        <div class="col-md-5 d-flex">
+            <div class="card shadow-lg border-0 rounded-4 p-4 w-100">
+
+                <h3 class="fw-bold text-center mb-4" style="color:#0d9648">
+                    Información de Contacto
+                </h3>
+
+                <!-- BARRANQUILLA -->
+                <h5 class="fw-bold mt-3">Barranquilla, Atlántico, Colombia</h5>
+
+                <p><i class="bi bi-geo-alt-fill text-success"></i> <strong>Dirección:</strong> Cra. 45 #36-02</p>
+                <p><i class="bi bi-telephone-fill text-success"></i> <strong>Teléfono:</strong> (605) 335-0533</p>
+                <p><i class="bi bi-phone-fill text-success"></i> <strong>Celular:</strong> (+57) 313-543-5084</p>
+                <p><i class="bi bi-telephone-fill text-success"></i> <strong>Teléfono:</strong> (+57) 320-733-5745</p>
+                <p><i class="bi bi-envelope-fill text-success"></i> <strong>Correo Electrónico:</strong> contacto@empaquetate.com</p>
+
+                <hr>
+
+                <!-- SINCELEJO -->
+                <h5 class="fw-bold mt-3">Sincelejo, Sucre, Colombia</h5>
+
+                <p><i class="bi bi-geo-alt-fill text-success"></i> <strong>Dirección:</strong> Cll 21 #20-52, Centro Comercial</p>
+                <p><i class="bi bi-telephone-fill text-success"></i> <strong>Teléfono:</strong> (605) 276-5062</p>
+                <p><i class="bi bi-phone-fill text-success"></i> <strong>Celular:</strong> (+57) 318-479-3546</p>
+                <p><i class="bi bi-telephone-fill text-success"></i> <strong>Teléfono:</strong> (+57) 321-659-6372</p>
+                <p><i class="bi bi-envelope-fill text-success"></i> <strong>Correo Electrónico:</strong> contacto@empaquetate.com</p>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var toastElList = [].slice.call(document.querySelectorAll('.toast'));
+    toastElList.forEach(function (toastEl) {
+        new bootstrap.Toast(toastEl, { delay: 3000 }).show();
+    });
+});
+</script>
+
+{% endblock contenido %}

@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% load static custom_filters %}
+
+{% block contenido %}
+
+<link rel="stylesheet" href="{% static 'css/producto_detalle.css' %}">
+
+<div class="container py-5">
+    
+    <h2 class="text-center mb-5">{{ producto.nombre }}</h2>
+
+    <div class="row">
+        
+        <div class="col-md-6 mb-4 mb-md-0 d-flex justify-content-center">
+            {% if producto.imagen %}
+                <img src="{{ producto.imagen.url }}" class="img-fluid rounded shadow-lg producto-imagen-lg"
+                     alt="{{ producto.nombre }}" style="max-height: 450px; object-fit: contain;">
+            {% else %}
+                <img src="{% static 'img/no-image.png' %}" class="img-fluid rounded shadow-lg producto-imagen-lg"
+                     alt="Imagen no disponible" style="max-height: 450px; object-fit: contain;">
+            {% endif %}
+        </div>
+
+        <div class="col-md-6 text-md-left">
+            
+            <h3 class="producto-precio text-success">
+                Precio: ${{ producto.precio|floatformat:"0" }} COP
+            </h3>
+            <hr>
+
+            <div class="mb-4">
+                
+                {% if producto.referencia %}
+                    <p class="mb-1"><strong>Referencia:</strong> {{ producto.referencia }}</p>
+                {% endif %}
+                
+                {% if producto.medidas %}
+                    <p class="mb-3"><strong>Medidas:</strong> {{ producto.medidas }}</p>
+                {% endif %}
+                
+                {% if producto.unidades_disponibles is not None %}
+                    <p class="mb-4"><strong>Unidades disponibles:</strong>
+                        <span class="text-primary">{{ producto.unidades_disponibles }}</span>
+                    </p>
+                {% endif %}
+                
+                {% if producto.colores %}
+                    <p class="mb-2"><strong>Colores Disponibles:</strong></p>
+                    <div class="color-swatches d-flex align-items-center mb-4">
+                        {% for color_hex in producto.colores|split:"," %}
+                            <span class="color-dot shadow-sm me-2"
+                                style="background-color: {{ color_hex|safe }}"
+                                title="Color {{ color_hex|safe }}">
+                            </span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="producto-descripcion-box mb-4">
+                <h4 class="mb-3">Descripción:</h4>
+                {% if producto.descripcion %}
+                    <p class="text-justify">{{ producto.descripcion|linebreaks }}</p>
+                {% else %}
+                    <p class="text-muted">No hay una descripción detallada disponible para este producto.</p>
+                {% endif %}
+            </div>
+
+            <div class="botones-acciones d-flex flex-column flex-md-row mt-4">
+
+                <a href="https://wa.me/573207335745?text={{ 'Hola, quiero más información sobre ' | add:producto.nombre | urlencode }}"
+                class="btn btn-success btn-lg me-md-3 mb-2 mb-md-0"
+                    style="background-color: #25D366; border-color: #25D366;">
+                    <i class="fab fa-whatsapp"></i> Consultar por WhatsApp
+                </a>
+
+                <a href="{% url 'productos' %}" class="btn btn-secondary btn-lg">
+                    ← Regresar al catálogo
+                </a>
+
+            </div>
+        </div>
+
+    </div> <!-- cierre del row -->
+</div> <!-- CIERRE FALTANTE DEL CONTAINER -->
+
+{% endblock contenido %}

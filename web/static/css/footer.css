@@ -1,0 +1,63 @@
+/* Estilos Específicos para el Footer */
+.footer-custom-green {
+    background-color: #0d9648; /* Tu color verde de marca */
+    color: white;
+}
+.footer-logo {
+    width: 200px; /* Tamaño del logo */
+    filter: brightness(0) invert(1); /* Hace que un logo negro se vea blanco sobre el fondo verde */
+}
+.footer-text-light {
+    color: #c0f4d8; /* Color para texto secundario */
+}
+.footer-title-style {
+    border-bottom: 2px solid #fff; /* Línea divisoria bajo el título */
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+/* Estilos de enlaces de navegación */
+.footer-list-links {
+    padding-left: 0;
+}
+.footer-list-links li {
+    margin-bottom: 5px;
+}
+.footer-link {
+    color: white;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+.footer-link:hover {
+    color: #e0e0e0;
+    text-decoration: underline;
+}
+
+/* Estilos para los iconos sociales */
+.social-icons-footer a {
+    color: white;
+    font-size: 1.5em;
+    margin: 0 5px;
+    transition: color 0.2s, transform 0.2s;
+}
+.social-icons-footer a:hover {
+    color: #e0e0e0;
+    transform: scale(1.1);
+}
+
+/* Estilos para la barra de búsqueda */
+.footer-search-form .form-control {
+    border-radius: 4px 0 0 4px;
+    border: none;
+}
+.footer-search-form .footer-search-btn {
+    background-color: #333; /* Color oscuro para el botón de búsqueda */
+    color: white;
+    border-radius: 0 4px 4px 0;
+    border: none;
+}
+.footer-copyright-area {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}

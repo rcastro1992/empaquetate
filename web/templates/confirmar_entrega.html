@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Confirmar Entrega{% endblock %}
+
+{% block contenido %}
+<h3 class="mb-3">Confirmar Entrega de Pedido</h3>
+
+{% if error %}
+<div class="alert alert-danger">{{ error }}</div>
+{% endif %}
+
+{% if mensaje %}
+<div class="alert alert-success">{{ mensaje }}</div>
+{% endif %}
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="mb-3">
+        <label>Pedido</label>
+        <select name="pedido" class="form-control" required>
+            <option value="">Seleccione un pedido</option>
+            {% for p in pedidos %}
+            <option value="{{ p.id }}">Pedido #{{ p.id }} - {{ p.cliente }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label>Nombre de la persona que recibe</label>
+        <input type="text" name="nombre_recibe" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+        <label>Observación</label>
+        <textarea name="observacion" class="form-control"></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label>Foto de evidencia</label>
+        <input type="file" name="foto" class="form-control" accept="image/*">
+    </div>
+
+    <button class="btn btn-success">Registrar Entrega</button>
+</form>
+
+
+{% endblock %}
+

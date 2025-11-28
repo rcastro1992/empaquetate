@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Intranet{% endblock %}
+
+{% block contenido %}
+<h3 class="mb-3">Ingreso Domiciliario</h3>
+
+{% if error %}
+<div class="alert alert-danger">{{ error }}</div>
+{% endif %}
+
+<form method="POST">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label>Usuario</label>
+        <input type="text" name="username" class="form-control">
+    </div>
+
+    <div class="mb-3">
+        <label>Contraseña</label>
+        <input type="password" name="password" class="form-control">
+    </div>
+
+    <button class="btn btn-primary">Ingresar</button>
+</form>
+{% endblock %}

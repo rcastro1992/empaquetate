@@ -1,0 +1,155 @@
+/* .producto-detalle-container {
+    max-width: 900px;
+    margin: auto;
+}
+
+.producto-imagen {
+    width: 100%;
+    max-height: 420px;
+    object-fit: cover;
+    border-radius: 14px;
+}
+
+.producto-titulo {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-top: 25px;
+}
+
+.producto-precio {
+    font-size: 1.3rem;
+    color: #444;
+    margin-bottom: 15px;
+}
+
+.producto-descripcion {
+    font-size: 1.1rem;
+    line-height: 1.55;
+    color: #4a4a4a;
+    padding: 0 10px;
+    margin-bottom: 25px;
+}
+
+.botones-acciones {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.btn-wsp, .btn-regresar {
+    padding: 12px 28px;
+    font-size: 1.05rem;
+    border-radius: 10px;
+}
+
+.btn-wsp {
+    background-color: #25D366;
+    color: white;
+}
+
+.btn-wsp:hover {
+    background-color: #1ea955;
+    color: white;
+}
+
+.btn-regresar {
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn-regresar:hover {
+    background-color: #555;
+    color: white;
+} */
+
+/* segundos estilos */
+
+/* .producto-detalle-container {
+    max-width: 900px;
+    margin: auto;
+}
+
+.producto-imagen {
+    width: 100%;
+    max-height: 420px;
+    object-fit: cover;
+    border-radius: 30px;
+    
+
+}
+
+.producto-imagen:hover {
+    transform: scale(1.05); 
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); 
+}
+
+.producto-titulo {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-top: 25px;
+}
+
+.producto-precio {
+    font-size: 1.3rem;
+    color: #444;
+    margin-bottom: 15px;
+}
+
+.producto-descripcion {
+    font-size: 1.1rem;
+    line-height: 1.55;
+    color: #4a4a4a;
+    padding: 0 10px;
+    margin-bottom: 25px;
+}
+
+.botones-acciones {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.btn-wsp, .btn-regresar {
+    padding: 12px 28px;
+    font-size: 1.05rem;
+    border-radius: 10px;
+}
+
+.btn-wsp {
+    background-color: #25D366;
+    color: white;
+}
+
+.btn-wsp:hover {
+    background-color: #0d9648;
+    color: white;
+}
+
+.btn-regresar {
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn-regresar:hover {
+    background-color: #555;
+    color: white;
+} */
+
+/* estilos 3 */
+
+.producto-imagen-lg {
+    border-radius: 30px;
+    transition: transform .3s ease, box-shadow .3s ease;
+}
+
+.producto-imagen-lg:hover {
+    transform: scale(1.03);
+    box-shadow: 0px 8px 25px rgba(0,0,0,0.3);
+}
+
+.producto-descripcion-box {
+    padding: 20px;
+    background: #fafafa;
+    border-radius: 12px;
+    box-shadow: 0px 2px 6px rgba(0,0,0,0.08);
+}

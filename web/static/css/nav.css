@@ -1,0 +1,22 @@
+/* Fondo verde corporativo */
+.navbar {
+    background-color: #0d9648 !important;
+}
+
+/* Logo */
+.navbar-brand img {
+    height: 40px; /* ajusta si lo quieres más grande */
+    margin-right: 10px;
+}
+
+/* Texto del navbar en blanco */
+.navbar .nav-link,
+.navbar .navbar-brand {
+    color: #ffffff !important;
+    font-weight: 500;
+}
+
+/* Hover */
+.navbar .nav-link:hover {
+    color: #d4f5e3 !important;
+}

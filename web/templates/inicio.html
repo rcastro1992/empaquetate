@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Inicio{% endblock %}
+
+{% block contenido %}
+
+<div id="carouselExampleIndicators" class="carousel slide carousel-fade mb-4" data-bs-ride="carousel" data-bs-interval="3500">
+
+    <div class="carousel-indicators">
+        {% for b in banners %}
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="{{ forloop.counter0 }}" class="{% if forloop.first %}active{% endif %}"></button>
+        {% endfor %}
+    </div>
+
+    <div class="carousel-inner">
+        {% for b in banners %}
+        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+            <img src="{{ b.imagen.url }}" class="d-block w-100" alt="Banner">
+            <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-2">
+                <h5>{{ b.titulo }}</h5>
+                <p>{{ b.descripcion }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+    </button>
+
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+        <span class="carousel-control-next-icon"></span>
+    </button>
+</div>
+
+
+{# --- SECCIÓN: MIL FORMAS DE EXPRESAR SENTIMIENTOS --- #}
+<section class="mil-formas-section text-center py-5">
+    <h2 class="mil-formas-titulo">Mil formas de Expresar sentimientos</h2>
+
+    <p class="mil-formas-texto">
+        Nuestra empresa se enorgullece de ofrecerte el empaque perfecto para tus ideas y regalos.
+        Con una amplia variedad de opciones y diseños personalizados, estamos aquí para satisfacer
+        todas tus necesidades de empaque. Ya sea que estés buscando una solución elegante para un
+        regalo especial o necesites empaques creativos para tus productos, contamos con la experiencia
+        y la calidad para brindar resultados excepcionales. ¡Confía en nosotros para hacer que tus ideas
+        brillen con nuestro empaque excepcional!
+    </p>
+
+    {# La cuadrícula de ejemplos estáticos está comentada, la dejamos así. #}
+</section>
+
+<!-- ⭐ SECCIÓN: PRODUCTOS MÁS VENDIDOS ⭐ -->
+<section class="text-center">
+    <div class="container mt-5">
+    <h3 class="mb-4">🔥 Productos más vendidos</h3>
+
+    <div class="row">
+
+        {% for p in productos_mas_vendidos %}
+        <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+            <a href="{% url 'detalle_producto' p.slug %}" class="text-decoration-none">
+                <div class="card shadow-sm h-100">
+
+                    {% if p.imagen %}
+                    <img src="{{ p.imagen.url }}" class="card-img-top" alt="{{ p.nombre }}">
+                    {% endif %}
+
+                    <div class="card-body">
+                        <h5 class="card-title">{{ p.nombre }}</h5>
+
+                        {% if p.descripcion %}
+                        <p class="text-muted small mb-1">
+                            {{ p.descripcion|striptags|truncatechars:15 }}
+                        </p>
+                        {% endif %}
+
+                        <p class="fw-bold text-bg-success rounded-3">${{ p.precio }}</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% empty %}
+        <p>No hay productos marcados como más vendidos.</p>
+        {% endfor %}
+
+    </div>
+</div>
+</section>
+<!-- ⭐ FIN SECCIÓN ⭐ -->
+
+
+<!-- ⭐ SECCIÓN: MI COMUNIDAD ⭐ -->
+<section class="container my-5">
+    <h3 class="mb-4 text-center">🌟 Nuestra Comunidad</h3>
+
+    <div class="row justify-content-center">
+        {% for c in comunidad %}
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card shadow-sm h-100 text-center">
+
+                {% if c.imagen %}
+                <img src="{{ c.imagen.url }}" class="card-img-top" alt="{{ c.titulo }}">
+                {% endif %}
+
+                <div class="card-body">
+                    <h5 class="card-title">{{ c.titulo }}</h5>
+                    
+                    {# CORRECCIÓN AQUÍ: Usamos 'c' en lugar de 'item' #}
+                    {% if c.fecha_evento %}
+                    <p class="text-muted">
+                        📅 Fecha del evento: {{ c.fecha_evento|date:"d/m/Y" }}
+                    </p>
+                    {% endif %}
+                    
+                    <p class="card-text text-muted">{{ c.descripcion|striptags|truncatechars:120 }}</p>
+                </div>
+
+            </div>
+        </div>
+        {% empty %}
+        <p class="text-center">Aún no hay publicaciones en la comunidad.</p>
+        {% endfor %}
+    </div>
+</section>
+<!-- ⭐ FIN SECCIÓN ⭐ -->
+
+
+
+
+{% endblock %}
