@@ -1,0 +1,122 @@
+
+{% extends "base.html" %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block titulo %}Intranet - Iniciar sesión{% endblock %}
+
+{% block contenido %}
+
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
+
+<!-- Font Awesome (iconos) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+/* Ajustes adicionales opcionales */
+ body {
+        background: linear-gradient(135deg, #f0f9f4, #e1f3e1);
+    }
+.login-card-custom {
+    border-radius: 20px;
+    padding: 40px;
+    border: none;
+    background: #ffffff;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.08);
+}
+.login-title { font-size: 26px; font-weight: 700; color: #1e5631; }
+.login-info-text { color: #666; font-size: 14px; margin-top: -5px; }
+.btn-login { background-color: #0d7a39; border-color: #0d7a39; font-size: 17px; padding: 10px; border-radius: 8px; }
+.btn-login:hover { background-color: #0b5c2c; }
+/* Hace que el icono del input-group no sea muy pesado visualmente */
+.input-group-text { background: transparent; border-right: 0; }
+.form-control { border-left: 0; }
+.input-group .form-control:focus { box-shadow: none; }
+</style>
+
+<div class="container d-flex align-items-center justify-content-center" style="min-height: 88vh;">
+
+    <div class="card login-card-custom" style="max-width: 450px; width: 100%;">
+
+        <div class="text-center mb-3">
+            <img src="{% static 'img/logo.png' %}" alt="Logo" style="width: 130px;">
+        </div>
+
+        <h3 class="text-center login-title mb-1">Intranet Empresarial</h3>
+        <p class="text-center login-info-text mb-4">
+            Acceso exclusivo para entregas, gestión de pedidos y personal autorizado.
+        </p>
+
+        {% if form.errors %}
+        <div class="alert alert-danger text-center">
+            Usuario o contraseña incorrectos.
+        </div>
+        {% endif %}
+
+        <form method="post" novalidate>
+            {% csrf_token %}
+
+            <!-- Usuario (input-group con icono) -->
+            <div class="mb-3">
+                <label class="form-label">Usuario</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fa fa-user"></i></span>
+                    {{ form.username|add_class:"form-control" }}
+                </div>
+            </div>
+
+            <!-- Contraseña (input-group con icono y botón mostrar/ocultar) -->
+            <div class="mb-3">
+                <label class="form-label">Contraseña</label>
+                <div class="input-group" id="pw-group">
+                    <span class="input-group-text"><i class="fa fa-lock"></i></span>
+                    {{ form.password|add_class:"form-control" }}
+                    <button class="btn btn-outline-secondary" type="button" id="togglePassword" title="Mostrar contraseña">
+                        <i class="fa fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+
+            {% if next %}
+                <input type="hidden" name="next" value="{{ next }}">
+            {% endif %}
+            <div class="form-check mb-3 mt-2">
+                <input class="form-check-input" type="checkbox" name="remember_me" id="remember_me">
+                    <label class="form-check-label" for="remember_me">
+                        Mantener sesión iniciada
+                    </label>
+            </div>
+
+
+            <button class="btn btn-login w-100 mt-2" type="submit">Ingresar</button>
+        </form>
+
+        <p class="text-center mt-4" style="font-size: 13px; color: #888;">
+            © Empaquetate · Plataforma interna
+        </p>
+
+    </div>
+</div>
+
+<!-- Pequeño script para alternar visibilidad de contraseña -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const toggle = document.getElementById('togglePassword');
+    if (!toggle) return;
+    const pwInput = document.querySelector('#pw-group input[type="password"], #pw-group input[type="text"]');
+    toggle.addEventListener('click', function () {
+        if (!pwInput) return;
+        if (pwInput.type === 'password') {
+            pwInput.type = 'text';
+            toggle.innerHTML = '<i class="fa fa-eye-slash"></i>';
+            toggle.title = 'Ocultar contraseña';
+        } else {
+            pwInput.type = 'password';
+            toggle.innerHTML = '<i class="fa fa-eye"></i>';
+            toggle.title = 'Mostrar contraseña';
+        }
+    });
+});
+</script>
+
+{% endblock %}

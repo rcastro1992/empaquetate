@@ -59,10 +59,24 @@ class Comunidad(models.Model):
 
 
 class Pedido(models.Model):
-    cliente = models.CharField(max_length=100)
+    cliente = models.CharField(max_length=150)
+    direccion = models.CharField(max_length=255)
+    ciudad = models.CharField(max_length=120)
+
+    fecha_pedido = models.DateTimeField(auto_now_add=True)
+
+    ESTADOS = (
+        ("pendiente", "Pendiente"),
+        ("en_camino", "En Camino"),
+        ("entregado", "Entregado"),
+    )
+    estado = models.CharField(max_length=20, choices=ESTADOS, default="pendiente")
+
+    entregado = models.BooleanField(default=False)
 
     def __str__(self):
         return f"Pedido #{self.id} - {self.cliente}"
+
 
 
 class Entrega(models.Model):

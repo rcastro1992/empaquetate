@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Bienvenido a la Intranet</h1>
+
+<p>Usuario autenticado: {{ request.user.username }}</p>
+
+<a href="{% url 'logout' %}">Cerrar sesión</a>
+
+{% endblock %}

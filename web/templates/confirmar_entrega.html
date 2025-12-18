@@ -2,48 +2,92 @@
 
 {% block titulo %}Confirmar Entrega{% endblock %}
 
+{# 1. Cargar Static para CSS y Posibles Scripts #}
+{% load static %}
+
 {% block contenido %}
-<h3 class="mb-3">Confirmar Entrega de Pedido</h3>
 
-{% if error %}
-<div class="alert alert-danger">{{ error }}</div>
-{% endif %}
 
-{% if mensaje %}
-<div class="alert alert-success">{{ mensaje }}</div>
-{% endif %}
+<div class="container py-5 d-flex justify-content-center">
+    <div class="col-12 col-md-7 col-lg-5"> {# Ancho ligeramente mayor para formularios #}
 
-<form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
+        <h2 class="mb-4 text-center fw-bold text-success">
+            <i class="fas fa-shipping-fast me-2"></i> Gestión de Entregas
+        </h2>
+        
+        {# 2. Contenedor de Formulario con Estilo (form-card) #}
+        <div class="form-card">
 
-    <div class="mb-3">
-        <label>Pedido</label>
-        <select name="pedido" class="form-control" required>
-            <option value="">Seleccione un pedido</option>
-            {% for p in pedidos %}
-            <option value="{{ p.id }}">Pedido #{{ p.id }} - {{ p.cliente }}</option>
-            {% endfor %}
-        </select>
+            {# Mensajes de Alerta #}
+            {% if error %}
+            <div class="alert alert-danger text-center animate__animated animate__shakeX">{{ error }}</div>
+            {% endif %}
+
+            {% if mensaje %}
+            <div class="alert alert-success text-center animate__animated animate__fadeIn">{{ mensaje }}</div>
+            {% endif %}
+
+            {% if pedidos %}
+
+            <p class="text-muted text-center mb-4">Documenta la finalización del pedido y adjunta la evidencia.</p>
+            
+            {# 3. Formulario con Animación Sutil #}
+            <form method="POST" enctype="multipart/form-data" class="text-center animate__animated animate__fadeInUp">
+                {% csrf_token %}
+
+                <div class="mb-4 text-start">
+                    <label class="form-label fw-bold">📦 Pedido a Entregar</label>
+                    <select name="pedido" class="form-select form-control" required>
+                        <option value="">Seleccione un pedido</option>
+                        {% for p in pedidos %}
+                        <option value="{{ p.id }}">Pedido #{{ p.id }} - {{ p.cliente }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="mb-4 text-start">
+                    <label class="form-label fw-bold">👤 Nombre de quién recibe</label>
+                    <input type="text" name="nombre_recibe" class="form-control" placeholder="Nombre completo" required>
+                </div>
+
+                <div class="mb-4 text-start">
+                    <label class="form-label fw-bold">📝 Observación (Opcional)</label>
+                    <textarea name="observacion" class="form-control" rows="3" placeholder="Detalles de la entrega..."></textarea>
+                </div>
+
+                <div class="mb-4 text-start">
+                    <label class="form-label fw-bold">📸 Foto de Evidencia</label>
+                    <input type="file" name="foto" class="form-control" accept="image/*" required>
+                </div>
+
+                <button class="btn btn-submit btn-lg w-100 mt-3">Registrar Entrega</button>
+
+            </form>
+
+            {% else %}
+            
+            {# 4. Empty State (Estado Vacío) con Animación #}
+            <div class="empty-state text-center animate__animated animate__fadeIn">
+                <i class="fas fa-check-circle text-success mb-3" style="font-size: 4rem;"></i>
+                <h3 class="text-success fw-bold">¡Día Exitoso!</h3>
+                <p class="text-muted">No hay pedidos pendientes para Entregar en este momento. ¡Buen trabajo!</p>
+                
+                <div class="mt-4">
+                    <a href="{% url 'logout' %}" class="btn btn-outline-danger">Cerrar sesión</a>
+                </div>
+            </div>
+
+            {% endif %}
+            
+        </div>
     </div>
+</div>
 
-    <div class="mb-3">
-        <label>Nombre de la persona que recibe</label>
-        <input type="text" name="nombre_recibe" class="form-control" required>
-    </div>
-
-    <div class="mb-3">
-        <label>Observación</label>
-        <textarea name="observacion" class="form-control"></textarea>
-    </div>
-
-    <div class="mb-3">
-        <label>Foto de evidencia</label>
-        <input type="file" name="foto" class="form-control" accept="image/*">
-    </div>
-
-    <button class="btn btn-success">Registrar Entrega</button>
-</form>
-
-
+{# 5. Script para Animaciones #}
+{% block extra_js %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 {% endblock %}
+
+{% endblock contenido %}
 
