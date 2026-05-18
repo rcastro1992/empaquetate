@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+
+{% block contenido %}
+<div class="container mt-4 mb-5">
+    <div class="card shadow">
+        <div class="card-header bg-success text-white text-center">
+            <h4 class="mb-0">Finalizar Entrega #{{ pedido.id }}</h4>
+        </div>
+        <div class="card-body">
+            <p><strong>Cliente:</strong> {{ pedido.cliente }}</p>
+            <p><strong>Dirección:</strong> {{ pedido.direccion }}</p>
+            
+            <form method="POST" enctype="multipart/form-data" id="form-entrega">
+                {% csrf_token %}
+                
+                <div class="mb-3">
+                    <label class="form-label">Nombre de quien recibe:</label>
+                    <input type="text" name="nombre_recibe" class="form-control" required placeholder="Ej: Juan Pérez">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Foto 1 (Evidencia):</label>
+                    <input type="file" name="foto" class="form-control" accept="image/*" capture="camera" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Foto 2 (Opcional):</label>
+                    <input type="file" name="foto_2" class="form-control" accept="image/*" capture="camera">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label d-block">Firma del Cliente:</label>
+                    <canvas id="canvas-firma" class="border bg-light w-100" style="height: 200px; cursor: crosshair;"></canvas>
+                    <button type="button" class="btn btn-sm btn-outline-secondary mt-2" onclick="limpiarFirma()">Borrar Firma</button>
+                    <input type="hidden" name="firma_canvas" id="firma_base64">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Observaciones:</label>
+                    <textarea name="observacion" class="form-control" rows="2"></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-success w-100 btn-lg" onclick="prepararEnvio(event)">
+                    ✅ Guardar y Finalizar Entrega
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    const canvas = document.getElementById('canvas-firma');
+    const ctx = canvas.getContext('2d');
+    let dibujando = false; // <-- CORREGIDO: en minúscula para JS
+
+    // Ajustar tamaño del canvas al ancho real
+    canvas.width = canvas.offsetWidth;
+    canvas.height = 200;
+
+    // Configuración del trazo (para que no se vea "pixelado")
+    ctx.lineWidth = 2;
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = '#000000';
+
+    function obtenerPos(e) {
+        const rect = canvas.getBoundingClientRect();
+        // Soporte para mouse y touch
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        return { 
+            x: clientX - rect.left, 
+            y: clientY - rect.top 
+        };
+    }
+
+    // Eventos de Mouse
+    canvas.addEventListener('mousedown', (e) => { 
+        dibujando = true; 
+        const pos = obtenerPos(e);
+        ctx.beginPath(); 
+        ctx.moveTo(pos.x, pos.y);
+    });
+
+    canvas.addEventListener('mousemove', (e) => {
+        if (!dibujando) return;
+        const pos = obtenerPos(e);
+        ctx.lineTo(pos.x, pos.y);
+        ctx.stroke();
+    });
+
+    window.addEventListener('mouseup', () => { dibujando = false; });
+
+    // Eventos TÁCTIL (Celulares)
+    canvas.addEventListener('touchstart', (e) => { 
+        e.preventDefault(); 
+        dibujando = true; 
+        const pos = obtenerPos(e);
+        ctx.beginPath(); 
+        ctx.moveTo(pos.x, pos.y);
+    });
+
+    canvas.addEventListener('touchmove', (e) => {
+        e.preventDefault();
+        if (!dibujando) return;
+        const pos = obtenerPos(e);
+        ctx.lineTo(pos.x, pos.y);
+        ctx.stroke();
+    });
+
+    window.addEventListener('touchend', () => { dibujando = false; });
+
+    function limpiarFirma() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    // Esta función debe llamarse en el onsubmit del <form>
+    function prepararEnvio(event) {
+        const dataURL = canvas.toDataURL();
+        const inputFirma = document.getElementById('firma_base64');
+        if (inputFirma) {
+            inputFirma.value = dataURL;
+        }
+    }
+
+    // Asegurar que al enviar el formulario se guarde la firma
+    const form = document.querySelector('form');
+    if (form) {
+        form.addEventListener('submit', prepararEnvio);
+    }
+</script>
+{% endblock %}

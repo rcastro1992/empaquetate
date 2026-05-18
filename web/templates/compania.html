@@ -1,6 +1,180 @@
 {% extends 'base.html' %}
+{% load static %}
 
+{% block titulo %}
+Compañía
+{% endblock %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/compania.css' %}">
+{% endblock %}
 
+{% block contenido %}
+
+<!-- HERO -->
+<section class="company-hero">
+
+    {% if info.hero_imagen %}
+        <img src="{{ info.hero_imagen.url }}" alt="Empresa">
+    {% endif %}
+
+    <div class="hero-overlay">
+
+        <div class="hero-content">
+
+            <h1>{{ info.hero_titulo }}</h1>
+
+            <p>{{ info.hero_descripcion }}</p>
+
+            <a href="{% url 'contacto' %}" class="company-btn">
+                Contáctanos
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- MISION / VISION / OBJETIVO -->
+<section class="company-info-section">
+
+    <div class="container">
+
+        <div class="row g-4">
+
+            <div class="col-lg-4">
+
+                <div class="info-card">
+
+                    <h3>Misión</h3>
+
+                    <p>{{ info.mision }}</p>
+
+                </div>
+
+            </div>
+
+            <div class="col-lg-4">
+
+                <div class="info-card">
+
+                    <h3>Visión</h3>
+
+                    <p>{{ info.vision }}</p>
+
+                </div>
+
+            </div>
+
+            <div class="col-lg-4">
+
+                <div class="info-card">
+
+                    <h3>Objetivo</h3>
+
+                    <p>{{ info.objetivo }}</p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- HISTORIA -->
+<section class="section-company mt-5">
+
+    <div class="container">
+
+        <div class="row g-4">
+
+            <!-- HISTORIA -->
+            <div class="col-lg-6">
+
+                <div class="company-card">
+
+                    {% if info.historia_imagen %}
+                        <img src="{{ info.historia_imagen.url }}" alt="">
+                    {% endif %}
+
+                    <div class="company-card-body">
+
+                        <h2>{{ info.historia_titulo }}</h2>
+
+                        <p>{{ info.historia_descripcion }}</p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- VIDEO -->
+            <div class="col-lg-6">
+
+                <div class="company-card">
+
+                    {% if info.trabajo_video %}
+                        <video controls>
+                            <source src="{{ info.trabajo_video.url }}">
+                        </video>
+                    {% endif %}
+
+                    <div class="company-card-body">
+
+                        <h3>{{ info.trabajo_titulo }}</h3>
+
+                        <p>{{ info.trabajo_descripcion }}</p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- GALERIA -->
+<section class="gallery-section mt-5">
+
+    <div class="container">
+
+        <div class="row g-4">
+
+            {% for item in galeria %}
+
+                <div class="col-lg-4">
+
+                    <div class="gallery-card">
+
+                        {% if item.imagen %}
+                            <img src="{{ item.imagen.url }}" alt="">
+                        {% endif %}
+
+                        {% if item.video %}
+                            <video controls>
+                                <source src="{{ item.video.url }}">
+                            </video>
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</section>
 
 {% endblock %}

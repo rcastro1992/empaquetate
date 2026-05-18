@@ -1,0 +1,137 @@
+/* ============================================================
+   DISEÑO PREMIUM: FORMULARIO DE COMENTARIOS (EMPAQUETATE)
+   ============================================================ */
+
+/* Fondo con patrón repetitivo de bolsas ecológicas y cajas */
+.form-com-bg-overlay {
+    background-image: url('/static/img/fondo-empaquetate.png');
+    background-repeat: repeat; /* Hace que la imagen se repita infinitamente cubriendo toda la pantalla */
+    background-size: 550px auto; /* Ajusta este valor para cambiar el tamaño de los dibujos */
+    background-position: center top;
+    min-height: 100vh;
+    width: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+
+
+
+/* Capa de suavizado ultra clara: Protege la lectura sin opacar los dibujos */
+.form-com-bg-overlay::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    /* Reducimos la opacidad al mínimo (0.15) y quitamos el blur para que las figuras se vean nítidas */
+    background-color: rgba(255, 255, 255, 0.15); 
+    z-index: 1;
+    
+}
+
+/* Asegura que la tarjeta del formulario flote limpiamente sobre el fondo nítido */
+.form-com-bg-overlay > .container {
+    position: relative;
+    z-index: 2;
+}
+
+/* Forzamos a que el contenedor de Bootstrap se posicione por encima del filtro de desenfoque */
+.form-com-bg-overlay > .container {
+    position: relative;
+    z-index: 2;
+}
+
+/* Fallback corregido por si la imagen tarda en cargar o para alto contraste */
+@media all and (-ms-high-contrast: none), (forced-colors: active) {
+    .form-com-bg-overlay {
+        background-color: #ebedee !important;
+    }
+}
+
+/* Tarjeta contenedora con bordes suavizados */
+.form-com-card {
+    border: none !important;
+    border-radius: 24px !important;
+    overflow: hidden;
+    background-color: #ffffff;
+    transition: transform 0.4s ease;
+}
+
+/* Cabecera verde corporativo */
+.form-com-header {
+    background: linear-gradient(135deg, #34b06a 0%, #146c43 100%);
+    padding: 35px 20px;
+    border-bottom: none;
+}
+
+.form-com-sparkles i.bi-stars {
+    color: #ffda6a; /* Color dorado suave para los destellos decorativos */
+}
+
+/* Estilos refinados para Inputs Flotantes de Django */
+.form-com-body .form-floating > .form-control {
+    border: 2px solid #ced4da !important;
+    border-radius: 12px !important;
+    padding: 1rem 0.75rem;
+    height: calc(3.5rem + 2px);
+    color: #212529;
+}
+
+/* Ajuste específico para el Textarea (Comentario) */
+.form-com-body .form-floating > textarea.form-control {
+    height: 120px !important;
+    resize: none;
+}
+
+/* Comportamiento al hacer Focus en los campos */
+.form-com-body .form-floating > .form-control:focus {
+    border-color: #0d9648 !important;
+    box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.15) !important;
+}
+
+/* Corrección de color de las etiquetas flotantes */
+.form-com-body .form-floating > label {
+    padding: 1rem 0.75rem;
+    color: #6c757d;
+}
+
+.form-com-body .form-floating > .form-control:focus ~ label,
+.form-com-body .form-floating > .form-control:not(:placeholder-shown) ~ label {
+    color: #0d9648 !important;
+    transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem);
+}
+
+/* Botón de envío dinámico con sombra y elevación */
+.form-com-btn {
+    background-color: #0d9648 !important;
+    border: none !important;
+    color: #ffffff !important;
+    border-radius: 50px !important; /* Estilo píldora idéntico al renderizado */
+    padding: 14px 24px !important;
+    font-weight: 600;
+    font-size: 1.05rem;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+}
+
+.form-com-btn:hover {
+    background-color: #146c43 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(25, 135, 84, 0.3) !important;
+}
+
+/* Textos pequeños e informativos */
+.form-com-info-text {
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+/* Enlaces del Footer */
+.form-com-link {
+    transition: color 0.2s ease;
+    font-weight: 500;
+}
+
+.form-com-link:hover {
+    color: #0d9648 !important;
+}

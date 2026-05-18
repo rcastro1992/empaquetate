@@ -1,48 +1,75 @@
-# 
-# ====== INICIO ========
-# ======================
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Pedido, Entrega, Banner, Producto, Comunidad
-from django.core.mail import send_mail, BadHeaderError
+from django.core.mail import send_mail
+from django.contrib.auth.views import LoginView
+from django.urls import reverse
 
-from .forms import FormularioContacto
+from .forms import FormularioContacto, TestimonioForm
 
+from .models import (
+    Pedido,
+    Entrega,
+    Banner,
+    Producto,
+    Comunidad,
+    Testimonio,
+    InformacionEmpresa,
+    GaleriaEmpresa
+)
 
 # ======== PÚBLICO ================== 
-# 
-# 
+
 def inicio(request):
+    """
+    Vista de inicio: 
+    1. Carga banners, productos y testimonios aprobados.
+    2. Procesa el formulario de nuevos comentarios de clientes.
+    """
     banners = Banner.objects.filter(activo=True)
     productos_mas_vendidos = Producto.objects.filter(mas_vendido=True)[:8]
+    
+    # Solo mostramos testimonios que tú ya aprobaste (activo=True)
+    testimonios = Testimonio.objects.filter(activo=True, destacado_inicio=True).order_by('-fecha')
     comunidad = Comunidad.objects.filter(activo=True)
+
+    # Lógica para recibir comentarios de clientes
+    if request.method == 'POST' and 'btn_testimonio' in request.POST:
+        form_testimonio = TestimonioForm(request.POST)
+        if form_testimonio.is_valid():
+            # Se guarda con activo=False por defecto (según el modelo)
+            form_testimonio.save()
+            return redirect('inicio')
+    else:
+        form_testimonio = TestimonioForm()
 
     return render(request, 'inicio.html', {
         'banners': banners,
         'productos_mas_vendidos': productos_mas_vendidos,
+        'testimonios': testimonios,
         'comunidad': comunidad,
+        'form_testimonio': form_testimonio,
     })
 
-
 def productos(request):
-    # La query original está bien, solo corregimos el render.
     productos = Producto.objects.filter(unidades_disponibles__gt=0)
-    
-    # Se corrige la indentación excesiva del diccionario de contexto
     return render(request, "web/productos.html", {"productos": productos})
 
-
 def detalle_producto(request, slug_producto):
-    # Asegúrate de importar get_object_or_404 en la parte superior del archivo.
-    # from django.shortcuts import get_object_or_404 
     producto = get_object_or_404(Producto, slug=slug_producto)
-    
     return render(request, "web/producto_detalle.html", {"producto": producto})
 
-
 def compania(request):
-    return render(request, 'compania.html')
 
+    info = InformacionEmpresa.objects.filter(activo=True).first()
+
+    galeria = GaleriaEmpresa.objects.filter(activo=True)
+
+    return render(request,
+                  'compania.html',
+                  {
+                      'info': info,
+                      'galeria': galeria
+                  })
 
 def contacto(request):
     formulario = FormularioContacto()
@@ -50,17 +77,10 @@ def contacto(request):
     
     if request.method == 'POST':
         formulario = FormularioContacto(request.POST)
-        
         if formulario.is_valid():
             datos = formulario.cleaned_data
             titulo = f"Nuevo mensaje de contacto - {datos['nombre']}"
-            cuerpo = f"""
-Has recibido un nuevo mensaje desde la web EMPAQUETATE:
-Nombre: {datos['nombre']}
-Correo: {datos['email']}
-Mensaje:
-{datos['mensaje']}
-"""
+            cuerpo = f"Nombre: {datos['nombre']}\nCorreo: {datos['email']}\nMensaje:\n{datos['mensaje']}"
             
             try:
                 send_mail(
@@ -70,110 +90,86 @@ Mensaje:
                     recipient_list=['contacto@empaquetate.com'],
                     fail_silently=False,
                 )
-                
                 mensaje_info = "¡Tu mensaje se ha enviado correctamente!"
-                formulario = FormularioContacto() # Limpiar formulario en caso de éxito
-                
-            except BadHeaderError:
-                mensaje_info = "Error: Encabezado de correo inválido."
+                formulario = FormularioContacto()
             except Exception as e:
                 mensaje_info = f"Error al enviar el correo: {str(e)}"
-            
-            # 🛑 NO necesitas un 'return render' aquí. El render final lo maneja.
     
-    # 🌟 ESTE ES EL RENDER FINAL. Se ejecuta si es GET, o POST (válido o inválido).
-    return render(request, 'contacto.html', {
-        'formulario': formulario,
-        'mensaje_info': mensaje_info
-    })
+    return render(request, 'contacto.html', {'formulario': formulario, 'mensaje_info': mensaje_info})
 
 # ============================================================
-# ==================  INTRANET / CONFIRMAR ENTREGA ===========
+# ==================  INTRANET / APP DOMICILIARIO  ===========
 # ============================================================
-
-
-
-
-
 
 @login_required
 def intranet(request):
-    """
-    Vista para que el domiciliario confirme entregas:
-    - Muestra pedidos pendientes
-    - Permite registrar la entrega con evidencia
-    """
+    pedidos_pendientes = Pedido.objects.filter(
+        repartidor_asignado=request.user, 
+        estado='en_camino'
+    ).order_by('-fecha_pedido')
 
-    pedidos_pendientes = Pedido.objects.filter(entrega__isnull=True)
+    return render(request, "intranet.html", {
+        "pedidos": pedidos_pendientes
+    })
 
-    # --- Si el usuario envía el formulario ---
+@login_required
+def completar_entrega(request, pedido_id):
+    pedido = get_object_or_404(Pedido, id=pedido_id, repartidor_asignado=request.user)
+
     if request.method == "POST":
-        pedido_id = request.POST.get("pedido")
         nombre_recibe = request.POST.get("nombre_recibe")
         observacion = request.POST.get("observacion")
         foto = request.FILES.get("foto")
+        foto_2 = request.FILES.get("foto_2")
+        firma_data = request.POST.get("firma") 
 
-        # Validar pedido pendiente
-        try:
-            pedido = Pedido.objects.get(id=pedido_id, entrega__isnull=True)
-        except Pedido.DoesNotExist:
-            return render(request, "confirmar_entrega.html", {
-                "error": f"El pedido ID {pedido_id} no existe o ya fue entregado.",
-                "pedidos": pedidos_pendientes
-            })
-
-        # Registrar entrega
         Entrega.objects.create(
             pedido=pedido,
             nombre_recibe=nombre_recibe,
             observacion=observacion,
-            domiciliario=request.user,
-            foto=foto
+            foto=foto,
+            foto_2=foto_2,
+            firma=firma_data,
+            domiciliario=request.user
         )
 
-        return render(request, "confirmar_entrega.html", {
-            "mensaje": "Entrega registrada correctamente.",
-            "pedidos": Pedido.objects.filter(entrega__isnull=True)
-        })
+        pedido.estado = 'entregado'
+        pedido.save()
 
-    # --- Mostrar formulario inicial ---
-    return render(request, "confirmar_entrega.html", {
-        "pedidos": pedidos_pendientes
-    })
+        return redirect('intranet')
+
+    return render(request, "completar_entrega.html", {"pedido": pedido})
 
 # ============================================================
 # ====================  LOGIN UNIFICADO  ======================
 # ============================================================
 
-from django.contrib.auth.views import LoginView
-from django.urls import reverse
-
 class UnifiedLoginView(LoginView):
-    """
-    Un solo login para todos los tipos de usuarios.
-    Admin → dashboard admin
-    Usuarios normales → intranet (confirmar entrega)
-    """
     template_name = 'registration/login.html'
     redirect_authenticated_user = True
 
     def get_success_url(self):
         user = self.request.user
-
-        # Si es administrador o staff → panel admin
         if user.is_staff or user.is_superuser:
             return reverse('admin:index')
-
-        # Usuario normal → intranet (confirmar entrega)
         return reverse('intranet')
 
     def form_valid(self, form):
         remember_me = self.request.POST.get('remember_me')
-
-        # Sesión expira al cerrar navegador si NO marcó "recordar sesión"
         if not remember_me:
             self.request.session.set_expiry(0)
         else:
-            self.request.session.set_expiry(60 * 60 * 24 * 30)  # 30 días
-
+            self.request.session.set_expiry(60 * 60 * 24 * 30) # 30 días
         return super().form_valid(form)
+    
+    # COMENTARIOS CLIENTES
+def dejar_comentario(request):
+    if request.method == 'POST':
+        form = TestimonioForm(request.POST)
+        if form.is_valid():
+            form.save() # Se guarda como inactivo por defecto
+            return render(request, 'comentario_exitoso.html') # Una paginita de gracias
+    else:
+        form = TestimonioForm()
+    
+    return render(request, 'dejar_comentario.html', {'form': form})

@@ -7,12 +7,11 @@ urlpatterns = [
     path('productos/', views.productos, name='productos'),
     path('compania/', views.compania, name='compania'),
     path('contacto/', views.contacto, name='contacto'),
-
-    # INTRANET (confirmar entrega)
     path('intranet/', views.intranet, name='intranet'),
-
-    # # Esta URL ya NO debe duplicar nombre
-    # path('confirmar-entrega/', views.intranet, name='confirmar_entrega'),
-
+    path('reparto/entregar/<int:pedido_id>/', views.completar_entrega, name='completar_entrega'),
     path('producto/<slug:slug_producto>/', views.detalle_producto, name='detalle_producto'),
+    path('dejar-comentario/', views.dejar_comentario, name='dejar_comentario'),
 ]
+
+
+   

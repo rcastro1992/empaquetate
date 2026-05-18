@@ -1,0 +1,58 @@
+/* ============================================================
+   ESTILOS BLINDADOS: CARROUSEL DE TESTIMONIOS (EMPAQUETATE)
+   ============================================================ */
+
+/* Contenedor de la tarjeta con nombre único */
+.tes-card {
+    border-radius: 25px !important;
+    border: none !important;
+    background: #ffffff !important;
+    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05) !important;
+}
+
+.tes-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.1) !important;
+}
+
+/* Icono de comillas */
+.tes-quote-icon {
+    color: #198754;
+    font-size: 2.2rem;
+    margin-bottom: 15px;
+}
+
+/* Texto del testimonio */
+.tes-text {
+    font-style: italic;
+    color: #555;
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+/* Nombre del cliente */
+.tes-client-name {
+    color: #198754;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 2px;
+}
+
+/* Flechas de navegación personalizadas */
+.tes-control {
+    width: 5% !important;
+}
+
+.tes-icon-circle {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    padding: 10px;
+    filter: invert(1); /* Vuelve las flechas negras */
+    transition: background 0.3s;
+}
+
+.tes-icon-circle:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+}

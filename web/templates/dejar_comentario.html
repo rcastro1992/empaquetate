@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/dejar_comentarios.css' %}">
+{% endblock %}
+
+{% block contenido %}
+<div class="form-com-bg-overlay">
+    <div class="container d-flex justify-content-center align-items-center min-vh-100 py-5">
+        <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+            
+            <div class="card form-com-card shadow-lg">
+                
+                <div class="form-com-header text-center text-white position-relative">
+                    <div class="form-com-sparkles mb-2">
+                        <i class="bi bi-stars opacity-50 me-2"></i>
+                        <i class="bi bi-chat-left-text-fill fs-1"></i>
+                        <i class="bi bi-stars opacity-50 ms-2"></i>
+                    </div>
+                    <h2 class="fw-bold h3 mb-2">Tu opinión nos inspira</h2>
+                    <p class="small mb-0 opacity-90 px-3">
+                        Ayúdanos a seguir creando momentos especiales y a mejorar para ti
+                    </p>
+                </div>
+
+                <div class="form-com-body p-4 p-md-5 bg-white">
+                    <form method="POST" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        
+                        <div class="form-floating mb-4">
+                            {{ form.nombre }}
+                            <label for="{{ form.nombre.id_for_label }}">¿Cómo te llamas?</label>
+                        </div>
+
+                        <div class="form-floating mb-4">
+                            {{ form.comentario }}
+                            <label for="{{ form.comentario.id_for_label }}">Escribe tu experiencia aquí...</label>
+                        </div>
+
+                        <button type="submit" class="form-com-btn btn w-100 d-flex align-items-center justify-content-center gap-2 shadow">
+                            <span>Enviar mi comentario</span>
+                            <i class="bi bi-send-fill small"></i>
+                        </button>
+                    </form>
+                    
+                    <div class="text-center mt-4 pt-2">
+                        <p class="form-com-info-text text-muted mb-0">
+                            <i class="bi bi-shield-check text-success me-1"></i>
+                            Tu mensaje será revisado con cariño antes de publicarse.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="form-com-footer border-top bg-light py-3 px-4 d-flex justify-content-center gap-3 text-muted small">
+                    <a href="{% url 'inicio' %}" class="text-decoration-none text-muted form-com-link">
+                        <i class="bi bi-arrow-left me-1"></i>Volver al inicio
+                    </a>
+                    <span class="text-black-50">|</span>
+                    <a href="{% url 'compania' %}" class="text-decoration-none text-muted form-com-link">
+                        <i class="bi bi-house me-1"></i>Compañía
+                    </a>
+                </div>
+
+            </div>
+            
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,9 +1,60 @@
 {% extends "base.html" %}
-{% block content %}
-<h1>Bienvenido a la Intranet</h1>
+{% load static %}
 
-<p>Usuario autenticado: {{ request.user.username }}</p>
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/intranet.css' %}">
+{% endblock %}
 
-<a href="{% url 'logout' %}">Cerrar sesión</a>
+{% block contenido %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1><strong>📦 Mis Entregas</strong></h1>
 
+       <form action="{% url 'logout' %}" method="post" class="ms-3">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-outline-danger btn-sm">Cerrar sesión</button>
+</form>
+    </div>
+
+    <p class="text-muted">Domiciliario: <strong>{{ request.user.username }}</strong></p>
+
+    <hr>
+
+    {% if pedidos %}
+        <div class="row">
+            {% for pedido in pedidos %}
+                <div class="col-12 col-md-6 mb-3">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body">
+                            <h5 class="card-title d-flex justify-content-between">
+                                Pedido #{{ pedido.id }}
+                                <span class="badge bg-warning text-dark">{{ pedido.get_estado_display }}</span>
+                            </h5>
+                            <p class="card-text mb-1"><strong>Cliente:</strong> {{ pedido.cliente }}</p>
+                            <p class="card-text mb-1"><strong>Dirección:</strong> {{ pedido.direccion }}</p>
+                            <p class="card-text mb-3"><strong>Ciudad:</strong> {{ pedido.ciudad }}</p>
+                            
+                            <div class="d-grid gap-2">
+                                {% if pedido.telefono %}
+                                    <a href="tel:{{ pedido.telefono }}" class="btn btn-outline-success">
+                                        📞 Llamar al cliente
+                                    </a>
+                                {% endif %}
+                                
+                                <a href="{% url 'completar_entrega' pedido.id %}" class="btn btn-outline-success">
+                                    ✍️ Confirmar Entrega
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info text-center">
+            <h4 class="alert-heading">¡Todo al día!</h4>
+            <p>No tienes pedidos asignados "En Camino" en este momento.</p>
+        </div>
+    {% endif %}
+</div>
 {% endblock %}

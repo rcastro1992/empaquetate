@@ -1,39 +1,139 @@
 
-    /* * Agrega estos estilos a tu archivo estático CSS (ej: web/static/css/intranet.css) 
-     * y cárgalo en tu base.html o aquí.
-     */
-    .form-card {
-        background-color: #ffffff; /* Fondo blanco */
-        border-radius: 15px; /* Bordes redondeados */
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); /* Sombra elegante */
-        padding: 40px;
-        transition: transform 0.3s ease-in-out; /* Transición para el hover */
-        border-left: 6px solid #28a745; /* Línea de color verde a la izquierda */
+    /* ===== BACKGROUND GENERAL ===== */
+
+body{
+    background:#f4f7fb;
+}
+
+/* ===== TITULOS ===== */
+
+h1{
+    color:#1e293b;
+    font-weight:800;
+}
+
+/* ===== CARD LOGIN / FORM ===== */
+
+.form-card{
+    background:#ffffff;
+    border-radius:20px;
+    box-shadow:0 10px 30px rgba(0,0,0,.12);
+    padding:40px;
+    transition:.3s;
+    border-left:6px solid #28a745;
+}
+
+.form-card:hover{
+    transform:translateY(-5px);
+}
+
+/* ===== INPUTS ===== */
+
+.form-control{
+    border-radius:12px;
+    padding:12px 15px;
+}
+
+.form-control:focus{
+    border-color:#28a745;
+    box-shadow:0 0 0 0.25rem rgba(40,167,69,.2);
+}
+
+/* ===== BOTONES ===== */
+
+.btn-submit{
+    background:#28a745;
+    border:none;
+    font-weight:700;
+    border-radius:12px;
+    padding:12px;
+    transition:.3s;
+}
+
+.btn-submit:hover{
+    background:#1e7e34;
+    transform:translateY(-2px);
+}
+
+/* ===== CARDS PEDIDOS ===== */
+
+.card{
+    border:none !important;
+    border-radius:20px;
+    overflow:hidden;
+    transition:.3s;
+    background:white;
+}
+
+.card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 15px 35px rgba(0,0,0,.12);
+}
+
+/* ===== BODY CARD ===== */
+
+.card-body{
+    padding:25px;
+}
+
+/* ===== TITULO PEDIDO ===== */
+
+.card-title{
+    font-weight:700;
+    color:#0f172a;
+}
+
+/* ===== BADGES ===== */
+
+.badge{
+    border-radius:12px;
+    padding:8px 12px;
+    font-size:.75rem;
+}
+
+/* ===== BOTONES ===== */
+
+.btn{
+    border-radius:12px;
+    font-weight:600;
+    padding:12px;
+    transition:.3s;
+}
+
+.btn:hover{
+    transform:translateY(-2px);
+}
+
+/* ===== ALERTA ===== */
+
+.alert{
+    border:none;
+    border-radius:20px;
+    padding:35px;
+}
+
+/* ===== EMPTY STATE ===== */
+
+.empty-state{
+    padding:50px;
+    background:#e9f7ee;
+    border-radius:15px;
+    border:1px dashed #28a745;
+    animation:fadeIn 1s ease-out;
+}
+
+/* ===== ANIMACION ===== */
+
+@keyframes fadeIn{
+
+    from{
+        opacity:0;
+        transform:translateY(10px);
     }
-    .form-card:hover {
-        transform: translateY(-5px); /* Pequeño levantamiento al pasar el ratón */
+
+    to{
+        opacity:1;
+        transform:translateY(0);
     }
-    .form-control:focus {
-        border-color: #28a745;
-        box-shadow: 0 0 0 0.25rem rgba(40, 167, 69, 0.25); /* Sombra de foco verde */
-    }
-    .btn-submit {
-        background-color: #28a745;
-        border: none;
-        font-weight: bold;
-        transition: background-color 0.3s ease;
-    }
-    .btn-submit:hover {
-        background-color: #1e7e34;
-    }
-    .empty-state {
-        padding: 50px;
-        background-color: #e9f7ee;
-        border-radius: 15px;
-        border: 1px dashed #28a745;
-        animation: fadeIn 1s ease-out; /* Animación de aparición */
-    }
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
+
+}

@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/testimonios.css' %}">
+{% endblock %}
+
+{% block contenido %}
+<div class="comentario-container bg-modern-gradient">
+    <div class="container">
+        <div class="row justify-content-center text-center">
+            <div class="col-md-7 col-lg-5">
+                <div class="comentario-card p-4 p-md-5">
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <i class="bi bi-check-circle-fill exito-icon"></i>
+                        </div>
+
+                        <h2 class="fw-bold mb-3 text-success">¡Recibido con éxito!👍</h2>
+                        
+                        <p class="text-muted fs-5 mb-4">
+                            Muchas gracias por compartir tu experiencia en <strong>Empaquetate</strong>. Tu opinión nos ayuda a mejorar cada día.
+                        </p>
+
+                        <div class="alerta-revision">
+                            <i class="bi bi-shield-lock-fill"></i> 
+                            Tu comentario está en revisión y aparecerá en la web tras ser aprobado.
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <a href="{% url 'inicio' %}" class="btn-enviar-comentario text-decoration-none text-center text-success">
+                                🔄 Volver al inicio
+                            </a>
+                            <button onclick="window.close();" class="btn btn-link text-muted text-decoration-none mt-2">
+                                Cerrar esta pestaña
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
